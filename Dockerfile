@@ -2,7 +2,8 @@ from ubuntu:18.04
 
 MAINTAINER Dan Walkes (walkes@colorado.edu)
 
-RUN apt-get update && apt-get install -y ruby cmake git build-essential
+# Assignment 1 requirements
+RUN apt-get update && apt-get install -y ruby cmake git build-essential bsdmainutils
 
 RUN mkdir /project
 
