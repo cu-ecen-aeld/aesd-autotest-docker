@@ -6,6 +6,7 @@ A docker container used for autotest of software projects used with CU Boulder
 
 ## Contents
 * Ubuntu base image with development essentials, cmake and ruby to support [Unity](http://www.throwtheswitch.org/)
+plus dependencies to support testing assignments.
 
 ## Usage
 
@@ -21,3 +22,9 @@ To run a specific test script in the container, you can use
 `docker run -it -v <local project path>:/project cuaesd/aesd-autotest ./<scriptname>`
 
 where `<scriptname>` is the path to the script relative to the local project path specified
+
+## Testing Locally
+You can test your changes locally (before they are available on docker hub) by building your own updated
+image.  Use 
+
+`docker build . -t cuaesd/aesd-autotest`
