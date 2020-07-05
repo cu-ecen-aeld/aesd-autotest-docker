@@ -10,13 +10,16 @@ RUN apt-get install -y automake bison chrpath flex g++ git gperf \
     gawk libexpat1-dev libncurses5-dev libsdl1.2-dev libtool \
     python2.7-dev texinfo help2man libtool-bin wget
 
-RUN adduser  --disabled-password --gecos '' admin && \
-    adduser admin sudo && \
+# Add a user account with sude permissions, use uid and gid unlikely to conflict
+# with a typical install
+RUN groupadd -g 3000 autotest-admin && \
+    adduser --uid 3000 --gid 3000 --disabled-password --gecos '' autotest-admin && \
+    adduser autotest-admin sudo && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-USER admin
+USER autotest-admin
 
-WORKDIR /home/admin
+WORKDIR /home/autotest-admin
 
 COPY crosstool-config .
 
@@ -28,12 +31,13 @@ RUN git clone https://github.com/crosstool-ng/crosstool-ng.git && \
      make && \
     ./ct-ng distclean && \
     ./ct-ng arm-unknown-linux-gnueabi && \
-    cp ../crosstool-config .config
-
-RUN cd crosstool-ng && \
+    cp ../crosstool-config .config && \
     ./ct-ng build && \
     cd .. && \
     rm -rf crosstool-ng
+
+# Make all cross compile tools executable by all users
+RUN chmod 775 /home/autotest-admin/x-tools/arm-unknown-linux-gnueabi/bin/*
 
 USER root
 RUN mkdir /project
