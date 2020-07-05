@@ -40,6 +40,10 @@ RUN git clone https://github.com/crosstool-ng/crosstool-ng.git && \
 RUN chmod 775 /home/autotest-admin/x-tools/arm-unknown-linux-gnueabi/bin/*
 
 USER root
+
+# Assignment 3 kernel build - add kernel build dependencies and qemu-system-arm
+RUN apt-get update && apt-get install -y bc qemu-system-arm u-boot-tools kmod cpio
+
 RUN mkdir /project
 
 # Create empty project directory (to be mapped by source code volume)
