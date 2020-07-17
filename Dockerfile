@@ -6,7 +6,7 @@ MAINTAINER Dan Walkes (walkes@colorado.edu)
 RUN apt-get update && apt-get install -y ruby cmake git build-essential bsdmainutils valgrind sudo
 
 # Assignment 3 requirments - support crosstool-ng
-RUN apt-get install -y automake bison chrpath flex g++ git gperf \
+RUN apt-get update && apt-get install -y automake bison chrpath flex g++ git gperf \
     gawk libexpat1-dev libncurses5-dev libsdl1.2-dev libtool \
     python2.7-dev texinfo help2man libtool-bin wget
 
@@ -61,13 +61,16 @@ RUN apt-get update && apt-get install -y dialog build-essential
 
 
 # Buildroot requirements for assignments 4 and later                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
-RUN apt-get update && apt-get install -y sed make binutils build-essential bash \
-    patch gzip bzip2 perl tar cpio unzip rsync file bc wget python libncurses5-dev \
-    git qemu openssh-client expect sshpass psmisc
+RUN apt-get update && apt-get install -y sed make binutils build-essential bash patch gzip bzip2 perl tar cpio unzip rsync file bc wget python libncurses5-dev git qemu
+RUN apt-get update && apt-get install -y openssh-client
+RUN apt-get update && apt-get install -y expect
+RUN apt-get update && apt-get install -y sshpass
+RUN apt-get update && apt-get install -y psmisc
 
-# Add github to known hosts so we don't get prompted to allow ssh key use there
-RUN touch /home/admin/.ssh/known_hosts
-RUN ssh-keyscan github.com >> /home/admin/.ssh/known_hosts
+# RUN mkdir /project
+# # Add github to known hosts so we don't get prompted to allow ssh key use there
+# RUN touch /home/admin/.ssh/known_hosts
+# RUN ssh-keyscan github.com >> /home/admin/.ssh/known_hosts
 # See https://docs.docker.com/engine/reference/builder/#copy
 # All files in the current directory should be copied to
 # the WORKDIR assignment-testing directory
