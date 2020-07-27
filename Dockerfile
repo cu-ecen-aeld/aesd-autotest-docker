@@ -48,37 +48,19 @@ RUN apt-get update && apt-get install -y bc qemu-system-arm u-boot-tools kmod cp
 # See https://docs.docker.com/engine/reference/builder/#from
 # and https://hub.docker.com/_/ubuntu/
 # Use the docker hub ubuntu image version 18.04
-FROM ubuntu:18.04 AS aesd-build
-
-RUN export UBUNTU_FRONTEND=noninteractive
-
-RUN apt-get update && apt-get install apt-utils -y
-RUN apt-get install -y tzdata
-RUN ln -fs /usr/share/zoneinfo/America/Denver /etc/localtime 
-RUN dpkg-reconfigure -f noninteractive tzdata
-
-RUN apt-get update && apt-get install -y dialog build-essential
-
-
-# Buildroot requirements for assignments 4 and later                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
-RUN apt-get update && apt-get install -y sed make binutils build-essential bash patch gzip bzip2 perl tar cpio unzip rsync file bc wget python libncurses5-dev git qemu
-RUN apt-get update && apt-get install -y openssh-client
-RUN apt-get update && apt-get install -y expect
-RUN apt-get update && apt-get install -y sshpass
-RUN apt-get update && apt-get install -y psmisc
-
-# RUN mkdir /project
-# # Add github to known hosts so we don't get prompted to allow ssh key use there
-# RUN touch /home/admin/.ssh/known_hosts
-# RUN ssh-keyscan github.com >> /home/admin/.ssh/known_hosts
-# See https://docs.docker.com/engine/reference/builder/#copy
-# All files in the current directory should be copied to
-# the WORKDIR assignment-testing directory
-COPY . assignment-testing
-
-RUN mkdir /project
-
-# Create empty project directory (to be mapped by source code volume)
-WORKDIR /project
+RUN apt-get update && \
+    DEBIAN_FRONTEND="noninteractive" TZ="America/Denver" apt-get install -y apt-utils \
+                        tzdata \
+                        sudo \
+                        dialog \
+                        build-essential \
+                        sed make binutils bash patch gzip bzip2 perl tar cpio unzip rsync file bc wget python libncurses5-dev git qemu\
+                        openssh-client \
+                        expect \
+                        sshpass \
+                        psmisc \
+                        && \
+    ln -fs /usr/share/zoneinfo/America/Denver /etc/localtime && \
+    dpkg-reconfigure -f noninteractive tzdata
 
 CMD ["/bin/bash"]
