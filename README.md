@@ -32,7 +32,11 @@ image.  Use
 ## Tagging
 Use [docker tags](https://docs.docker.com/engine/reference/commandline/tag/) to tag an image for a specific assignment.  The tag should match the name specified in the `conf/assignment.txt` file for the given assignment.
 ```
-docker tag cuaesd/aesd-autotest:<tagname>
+docker tag cuaesd/aesd-autotest:latest cuaesd/aesd-autotest:<tagname>
+```
+or if you want to use the same container used in a different assignment, use:
+```
+docker tag cuaesd/aesd-autotest:<otherassignment> cuaesd/aesd-autotest:<tagname>
 ```
 
 ## Pushing to Docker Hub
