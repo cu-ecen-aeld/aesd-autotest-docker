@@ -28,3 +28,17 @@ You can test your changes locally (before they are available on docker hub) by b
 image.  Use 
 
 `docker build . -t cuaesd/aesd-autotest`
+
+## Tagging
+Use [docker tags](https://docs.docker.com/engine/reference/commandline/tag/) to tag an image for a specific assignment.  The tag should match the name specified in the `conf/assignment.txt` file for the given assignment.
+```
+docker tag cuaesd/aesd-autotest:<tagname>
+```
+
+## Pushing to Docker Hub
+When an assignment container is complete and ready to be run with the autotest framework, push to docker hub using 
+```
+docker login
+docker push cuaesd/aesd-autotest:<tagname>
+```
+Talk to Dan if you need access to docker hub.
