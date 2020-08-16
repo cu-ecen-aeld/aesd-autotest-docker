@@ -63,4 +63,8 @@ RUN apt-get update && \
     ln -fs /usr/share/zoneinfo/America/Denver /etc/localtime && \
     dpkg-reconfigure -f noninteractive tzdata
 
+# Assignment 5 changes
+RUN apt-get update && \
+    apt-get install -y netcat iputils-ping
+
 CMD ["/bin/bash"]
