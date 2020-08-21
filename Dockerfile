@@ -83,4 +83,7 @@ RUN apt-get update && \
     ln -fs /usr/share/zoneinfo/America/Denver /etc/localtime && \
     dpkg-reconfigure -f noninteractive tzdata
 
+RUN locale-gen en_US.UTF-8 && update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
 CMD ["/bin/bash"]
