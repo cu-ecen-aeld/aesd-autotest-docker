@@ -1,12 +1,13 @@
-from ubuntu:18.04
+from ubuntu:20.04
 
 MAINTAINER Dan Walkes (walkes@colorado.edu)
 
 # Assignment 1 requirements
-RUN apt-get update && apt-get install -y ruby cmake git build-essential bsdmainutils valgrind sudo
-
-# Assignment 3 requirments - support crosstool-ng
-RUN apt-get update && apt-get install -y automake bison chrpath flex g++ git gperf \
+RUN apt-get update &&  \
+    DEBIAN_FRONTEND="noninteractive" TZ="America/Denver"  apt-get install -y \
+    ruby cmake git build-essential bsdmainutils valgrind sudo && \
+    echo "Assignment 3 requirements - support crosstoolng" && \
+    apt-get install -y automake bison chrpath flex g++ git gperf \
     gawk libexpat1-dev libncurses5-dev libsdl1.2-dev libtool \
     python2.7-dev texinfo help2man libtool-bin wget
 
@@ -69,7 +70,7 @@ RUN apt-get update && \
     
 #Assignment 6 changes
 RUN apt-get update && \
-    UBUNTU_FRONTEND="noninteractive" TZ="America/Denver" apt-get install -y apt-utils \
+    DEBIAN_FRONTEND="noninteractive" TZ="America/Denver" apt-get install -y apt-utils \
                         valgrind \
                         netcat \
                         tzdata \
