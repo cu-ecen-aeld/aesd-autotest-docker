@@ -24,7 +24,7 @@ RUN wget -O gcc-arm.tar.xz \
     rm -rf gcc-arm.tar.gz
 
 # Assignment 3 kernel build - add kernel build dependencies and qemu-system-arm
-RUN apt-get update && apt-get install -y bc qemu-system-arm u-boot-tools kmod cpio flex bison
+RUN apt-get update && apt-get install -y bc qemu-system-arm u-boot-tools kmod cpio flex bison libssl-dev
 
 # Assignment 3 path updates
 #RUN  echo "export PATH=\$PATH:$(find /usr/arm-cross-compiler/install -maxdepth 2 -type d -name bin)" >> \
