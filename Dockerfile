@@ -21,7 +21,7 @@ RUN wget -O gcc-arm.tar.xz \
     https://developer.arm.com/-/media/Files/downloads/gnu-a/10.2-2020.11/binrel/gcc-arm-10.2-2020.11-x86_64-aarch64-none-linux-gnu.tar.xz && \
     mkdir install && \
     tar x -C install -f gcc-arm.tar.xz && \
-    rm -rf gcc-arm.tar.gz
+    rm -r gcc-arm.tar.xz
 
 # Assignment 3 kernel build - add kernel build dependencies and qemu-system-arm
 RUN apt-get update && apt-get install -y bc qemu-system-arm u-boot-tools kmod cpio flex bison libssl-dev
