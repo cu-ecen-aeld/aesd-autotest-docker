@@ -14,7 +14,7 @@ RUN groupadd -g 3000 autotest-admin && \
     adduser autotest-admin sudo && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-WORKDIR /usr/arm-cross-compiler/
+WORKDIR /usr/local/arm-cross-compiler/
 
 # Assignment 3 - ARM cross compiler
 RUN wget -O gcc-arm.tar.xz \
@@ -30,9 +30,9 @@ RUN apt-get update && apt-get install -y bc qemu-system-arm u-boot-tools kmod cp
 #RUN  echo "export PATH=\$PATH:$(find /usr/arm-cross-compiler/install -maxdepth 2 -type d -name bin)" >> \
 #            /root/.bashrc
 
-RUN  sed -i "/^# If not running interactively, don't do anything.*/i export PATH=\$PATH:$(find /usr/arm-cross-compiler/install -maxdepth 2 -type d -name bin)" \
+RUN  sed -i "/^# If not running interactively, don't do anything.*/i export PATH=\$PATH:$(find /usr/local/arm-cross-compiler/install -maxdepth 2 -type d -name bin)" \
             /root/.bashrc
-RUN  sed -i "/^# If not running interactively, don't do anything.*/i export PATH=\$PATH:$(find /usr/arm-cross-compiler/install -maxdepth 2 -type d -name bin)" \
+RUN  sed -i "/^# If not running interactively, don't do anything.*/i export PATH=\$PATH:$(find /usr/local/arm-cross-compiler/install -maxdepth 2 -type d -name bin)" \
             /home/autotest-admin/.bashrc
 
 
