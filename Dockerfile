@@ -5,6 +5,7 @@ MAINTAINER Dan Walkes (walkes@colorado.edu)
 # Assignment 1 requirements
 RUN apt-get update &&  \
     DEBIAN_FRONTEND="noninteractive" TZ="America/Denver"  apt-get install -y \
+    --no-install-recommends \
     ruby cmake git build-essential bsdmainutils valgrind sudo wget
 
 # Add a user account with sude permissions, use uid and gid unlikely to conflict
@@ -24,7 +25,10 @@ RUN wget -O gcc-arm.tar.xz \
     rm -r gcc-arm.tar.xz
 
 # Assignment 3 kernel build - add kernel build dependencies and qemu-system-arm
-RUN apt-get update && apt-get install -y bc qemu-system-arm u-boot-tools kmod cpio flex bison libssl-dev
+# Use recommends with qemu-system-arm since it needs rom files we don't obtain with no-install-recommends
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        bc u-boot-tools kmod cpio flex bison libssl-dev psmisc && \
+    apt-get install -y qemu-system-arm
 
 # Assignment 3 path updates
 #RUN  echo "export PATH=\$PATH:$(find /usr/arm-cross-compiler/install -maxdepth 2 -type d -name bin)" >> \
