@@ -24,6 +24,10 @@ if [ ! -z "${uid}" ]; then
     echo "Remapping uid ${uid} to autotest-admin user"
     usermod -u $uid autotest-admin
     groupmod -g $gid autotest-admin
-    exec su - autotest-admin $@
+    workdir=$(pwd)
+    # Run as the autotest-admin with newly mapped user and group
+    # permissions.  We won't return from this step
+    exec su --login autotest-admin /bin/bash -c "cd ${workdir} && $@"
 fi
-exec $@
+# If we don't specify a user and group to map to, just run as root
+$@
