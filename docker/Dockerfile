@@ -1,4 +1,4 @@
-from ubuntu:20.04
+from ubuntu:20.04 AS assignment1
 
 MAINTAINER Dan Walkes (walkes@colorado.edu)
 
@@ -15,6 +15,8 @@ RUN groupadd -g 3000 autotest-admin && \
     adduser autotest-admin sudo && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
+FROM assignment1 AS assignment2
+FROM assignment2 AS assignment3
 WORKDIR /usr/local/arm-cross-compiler/
 
 # Assignment 3 - ARM cross compiler
@@ -39,7 +41,7 @@ RUN  sed -i "/^# If not running interactively, don't do anything.*/i export PATH
 RUN  sed -i "/^# If not running interactively, don't do anything.*/i export PATH=\$PATH:$(find /usr/local/arm-cross-compiler/install -maxdepth 2 -type d -name bin)" \
             /home/autotest-admin/.bashrc
 
-
+ENV PATH="${PATH}:/usr/local/arm-cross-compiler/install/gcc-arm-10.2-2020.11-x86_64-aarch64-none-linux-gnu/bin"
 
 WORKDIR /home/autotest-admin
 COPY entrypoint.sh .

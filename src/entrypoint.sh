@@ -20,14 +20,14 @@ while getopts ":i:g:" opt; do
     esac
 done
 shift $((OPTIND -1))
+workdir=$(pwd)
 if [ ! -z "${uid}" ]; then
     echo "Remapping uid ${uid} to autotest-admin user"
     usermod -u $uid autotest-admin
     groupmod -g $gid autotest-admin
-    workdir=$(pwd)
     # Run as the autotest-admin with newly mapped user and group
     # permissions.  We won't return from this step
     exec su --login autotest-admin /bin/bash -c "cd ${workdir} && $@"
 fi
 # If we don't specify a user and group to map to, just run as root
-$@
+exec su --login root /bin/bash -c "cd ${workdir} && $@"
