@@ -16,7 +16,15 @@ RUN groupadd -g 3000 autotest-admin && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 FROM assignment1 AS assignment2
-FROM assignment2 AS assignment3
+FROM assignment2 AS assignment3-kernel
+
+# Assignment 3 kernel build - add kernel build dependencies and qemu-system-arm
+# Use recommends with qemu-system-arm since it needs rom files we don't obtain with no-install-recommends
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        bc u-boot-tools kmod cpio flex bison libssl-dev psmisc && \
+    apt-get install -y qemu-system-arm
+
+FROM assignment3-kernel AS assignment3
 WORKDIR /usr/local/arm-cross-compiler/
 
 # Assignment 3 - ARM cross compiler
@@ -26,11 +34,6 @@ RUN wget -O gcc-arm.tar.xz \
     tar x -C install -f gcc-arm.tar.xz && \
     rm -r gcc-arm.tar.xz
 
-# Assignment 3 kernel build - add kernel build dependencies and qemu-system-arm
-# Use recommends with qemu-system-arm since it needs rom files we don't obtain with no-install-recommends
-RUN apt-get update && apt-get install -y --no-install-recommends \
-        bc u-boot-tools kmod cpio flex bison libssl-dev psmisc && \
-    apt-get install -y qemu-system-arm
 
 # Assignment 3 path updates
 #RUN  echo "export PATH=\$PATH:$(find /usr/arm-cross-compiler/install -maxdepth 2 -type d -name bin)" >> \
@@ -42,6 +45,25 @@ RUN  sed -i "/^# If not running interactively, don't do anything.*/i export PATH
             /home/autotest-admin/.bashrc
 
 ENV PATH="${PATH}:/usr/local/arm-cross-compiler/install/gcc-arm-10.2-2020.11-x86_64-aarch64-none-linux-gnu/bin"
+
+# For assignment 4 we don't need assignment 3 cross compile content, we'll use buildroot for this
+from assignment3-kernel AS assignment4-buildroot
+RUN apt-get update && \
+    DEBIAN_FRONTEND="noninteractive" TZ="America/Denver" apt-get install -y apt-utils \
+                        tzdata \
+                        sudo \
+                        dialog \
+                        build-essential \
+                        sed make binutils bash patch gzip bzip2 perl tar cpio unzip rsync file bc wget python libncurses5-dev git qemu\
+                        openssh-client \
+                        expect \
+                        sshpass \
+                        psmisc \
+                        netcat iputils-ping \
+                        && \
+    ln -fs /usr/share/zoneinfo/America/Denver /etc/localtime && \
+    dpkg-reconfigure -f noninteractive tzdata
+
 
 WORKDIR /home/autotest-admin
 COPY entrypoint.sh .
