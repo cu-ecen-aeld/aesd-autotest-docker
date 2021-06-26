@@ -64,6 +64,12 @@ RUN apt-get update && \
     ln -fs /usr/share/zoneinfo/America/Denver /etc/localtime && \
     dpkg-reconfigure -f noninteractive tzdata
 
+FROM assignment2 AS assignment4
+FROM assignment4 AS assignment5
+RUN apt-get update && \
+    apt-get install -y netcat
+
+FROM assignment4-buildroot AS assignment5-buildroot
 
 WORKDIR /home/autotest-admin
 COPY entrypoint.sh .
