@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-for number in $(seq 5); do
+for number in $(seq 6); do
     docker push cuaesd/aesd-autotest:assignment${number}
 done
 docker push cuaesd/aesd-autotest:assignment4-buildroot

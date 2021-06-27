@@ -69,6 +69,8 @@ FROM assignment4 AS assignment5
 RUN apt-get update && \
     apt-get install -y netcat
 
+FROM assignment5 AS assignment6
+
 FROM assignment4-buildroot AS assignment5-buildroot
 RUN apt-get update && \
     apt-get install -y netcat
