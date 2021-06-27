@@ -70,6 +70,8 @@ RUN apt-get update && \
     apt-get install -y netcat
 
 FROM assignment4-buildroot AS assignment5-buildroot
+RUN apt-get update && \
+    apt-get install -y netcat
 
 WORKDIR /home/autotest-admin
 COPY entrypoint.sh .
