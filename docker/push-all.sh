@@ -5,4 +5,5 @@ for number in $(seq 6); do
 done
 docker push cuaesd/aesd-autotest:assignment4-buildroot
 docker push cuaesd/aesd-autotest:assignment5-buildroot
+docker push cuaesd/aesd-autotest:assignment6-yocto
 docker push cuaesd/aesd-autotest:unit-test
