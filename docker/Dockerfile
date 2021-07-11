@@ -8,10 +8,10 @@ RUN apt-get update &&  \
     --no-install-recommends \
     ruby cmake git build-essential bsdmainutils valgrind sudo wget
 
-# Add a user account with sude permissions, use uid and gid unlikely to conflict
-# with a typical install
-RUN groupadd -g 3000 autotest-admin && \
-    adduser --uid 3000 --gid 3000 --disabled-password --gecos '' autotest-admin && \
+# For use with github actions we need a user account we can run in the container which
+# maps to the user setup on the github runner VM instance.
+RUN groupadd -g 1001 autotest-admin && \
+    adduser --uid 1001 --gid 1001 --disabled-password --gecos '' autotest-admin && \
     adduser autotest-admin sudo && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
@@ -87,6 +87,11 @@ RUN apt-get update && \
      pylint3 xterm
 RUN apt-get update && \
     apt-get install -y sshpass openssh-client netcat iputils-ping
+RUN apt -y install locales && \
+  dpkg-reconfigure locales && \
+  locale-gen en_US.UTF-8 && \
+  update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
+
 
 WORKDIR /home/autotest-admin
 COPY entrypoint.sh .
