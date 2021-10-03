@@ -64,6 +64,9 @@ RUN apt-get update && \
     ln -fs /usr/share/zoneinfo/America/Denver /etc/localtime && \
     dpkg-reconfigure -f noninteractive tzdata
 
+RUN apt-get update && apt-get install --reinstall ca-certificates && \
+    update-ca-certificates
+
 FROM assignment2 AS assignment4
 FROM assignment4 AS assignment5
 RUN apt-get update && \
