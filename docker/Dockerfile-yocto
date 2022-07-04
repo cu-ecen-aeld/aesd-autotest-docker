@@ -1,0 +1,5 @@
+from crops/poky:ubuntu-20.04 AS assignment6-yocto
+USER root
+RUN apt-get update && \
+    apt-get install -y sshpass openssh-client netcat iputils-ping
+
