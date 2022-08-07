@@ -81,21 +81,6 @@ RUN apt-get update && \
 
 FROM assignment5-buildroot AS assignment7-buildroot
 
-from assignment3-kernel AS assignment6-yocto
-# See https://www.yoctoproject.org/docs/latest/brief-yoctoprojectqs/brief-yoctoprojectqs.html#brief-build-system-packages
-RUN apt-get update && \
-    apt-get install -y gawk wget git-core diffstat unzip texinfo gcc-multilib \
-     build-essential chrpath socat cpio python3 python3-pip python3-pexpect \
-     xz-utils debianutils iputils-ping python3-git python3-jinja2 libegl1-mesa libsdl1.2-dev \
-     pylint3 xterm
-RUN apt-get update && \
-    apt-get install -y sshpass openssh-client netcat iputils-ping
-RUN apt -y install locales && \
-  dpkg-reconfigure locales && \
-  locale-gen en_US.UTF-8 && \
-  update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
-
-
 WORKDIR /home/autotest-admin
 COPY entrypoint.sh .
 RUN chmod a+x entrypoint.sh
