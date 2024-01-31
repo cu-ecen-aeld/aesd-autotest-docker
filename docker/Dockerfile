@@ -29,7 +29,7 @@ WORKDIR /usr/local/arm-cross-compiler/
 
 # Assignment 3 - ARM cross compiler
 RUN wget -O gcc-arm.tar.xz \
-    https://developer.arm.com/-/media/Files/downloads/gnu-a/10.2-2020.11/binrel/gcc-arm-10.2-2020.11-x86_64-aarch64-none-linux-gnu.tar.xz && \
+    https://developer.arm.com/-/media/Files/downloads/gnu-a/10.3-2021.07/binrel/gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu.tar.xz && \
     mkdir install && \
     tar x -C install -f gcc-arm.tar.xz && \
     rm -r gcc-arm.tar.xz
