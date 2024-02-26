@@ -8,6 +8,13 @@ RUN apt-get update &&  \
     --no-install-recommends \
     ruby cmake git build-essential bsdmainutils valgrind sudo wget
 
+# Avoids "detected dubious ownership"
+# based on discussion at https://github.com/git/git/commit/8959555cee7ec045958f9b6dd62e541affb7e7d9
+# Since this container is only used/useful with autotest runners and
+# the autotest runner will create its own work directory I don't think
+# the shared directory exposure listed there applies
+RUN git config --system --add safe.directory '*'
+
 # For use with github actions we need a user account we can run in the container which
 # maps to the user setup on the github runner VM instance.
 RUN groupadd -g 1001 autotest-admin && \
@@ -26,25 +33,21 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 FROM assignment3-kernel AS assignment3
 WORKDIR /usr/local/arm-cross-compiler/
-
+ARG GCC_ARM_VERSION=10.3-2021.07
 # Assignment 3 - ARM cross compiler
 RUN wget -O gcc-arm.tar.xz \
-    https://developer.arm.com/-/media/Files/downloads/gnu-a/10.3-2021.07/binrel/gcc-arm-10.3-2021.07-x86_64-aarch64-none-linux-gnu.tar.xz && \
+    https://developer.arm.com/-/media/Files/downloads/gnu-a/$GCC_ARM_VERSION/binrel/gcc-arm-$GCC_ARM_VERSION-x86_64-aarch64-none-linux-gnu.tar.xz && \
     mkdir install && \
     tar x -C install -f gcc-arm.tar.xz && \
     rm -r gcc-arm.tar.xz
 
-
-# Assignment 3 path updates
-#RUN  echo "export PATH=\$PATH:$(find /usr/arm-cross-compiler/install -maxdepth 2 -type d -name bin)" >> \
-#            /root/.bashrc
+ENV PATH="${PATH}:/usr/local/arm-cross-compiler/install/gcc-arm-$GCC_ARM_VERSION-x86_64-aarch64-none-linux-gnu/bin"
 
 RUN  sed -i "/^# If not running interactively, don't do anything.*/i export PATH=\$PATH:$(find /usr/local/arm-cross-compiler/install -maxdepth 2 -type d -name bin)" \
             /root/.bashrc
 RUN  sed -i "/^# If not running interactively, don't do anything.*/i export PATH=\$PATH:$(find /usr/local/arm-cross-compiler/install -maxdepth 2 -type d -name bin)" \
             /home/autotest-admin/.bashrc
 
-ENV PATH="${PATH}:/usr/local/arm-cross-compiler/install/gcc-arm-10.2-2020.11-x86_64-aarch64-none-linux-gnu/bin"
 
 # For assignment 4 we don't need assignment 3 cross compile content, we'll use buildroot for this
 from assignment3-kernel AS assignment4-buildroot
