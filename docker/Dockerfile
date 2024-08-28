@@ -1,6 +1,6 @@
-from ubuntu:20.04 AS assignment1
+FROM ubuntu:22.04 AS assignment1
 
-MAINTAINER Dan Walkes (walkes@colorado.edu)
+LABEL maintainer="Dan Walkes (walkes@colorado.edu)"
 
 # Assignment 1 requirements
 RUN apt-get update &&  \
@@ -33,15 +33,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 FROM assignment3-kernel AS assignment3
 WORKDIR /usr/local/arm-cross-compiler/
-ARG GCC_ARM_VERSION=10.3-2021.07
+ARG GCC_ARM_VERSION=13.3.rel1
 # Assignment 3 - ARM cross compiler
 RUN wget -O gcc-arm.tar.xz \
-    https://developer.arm.com/-/media/Files/downloads/gnu-a/$GCC_ARM_VERSION/binrel/gcc-arm-$GCC_ARM_VERSION-x86_64-aarch64-none-linux-gnu.tar.xz && \
+    https://developer.arm.com/-/media/Files/downloads/gnu/$GCC_ARM_VERSION/binrel/arm-gnu-toolchain-$GCC_ARM_VERSION-x86_64-aarch64-none-linux-gnu.tar.xz && \
     mkdir install && \
     tar x -C install -f gcc-arm.tar.xz && \
     rm -r gcc-arm.tar.xz
 
-ENV PATH="${PATH}:/usr/local/arm-cross-compiler/install/gcc-arm-$GCC_ARM_VERSION-x86_64-aarch64-none-linux-gnu/bin"
+ENV PATH="${PATH}:/usr/local/arm-cross-compiler/install/arm-gnu-toolchain-$GCC_ARM_VERSION-x86_64-aarch64-none-linux-gnu/bin"
 
 RUN  sed -i "/^# If not running interactively, don't do anything.*/i export PATH=\$PATH:$(find /usr/local/arm-cross-compiler/install -maxdepth 2 -type d -name bin)" \
             /root/.bashrc
@@ -50,14 +50,14 @@ RUN  sed -i "/^# If not running interactively, don't do anything.*/i export PATH
 
 
 # For assignment 4 we don't need assignment 3 cross compile content, we'll use buildroot for this
-from assignment3-kernel AS assignment4-buildroot
+FROM assignment3-kernel AS assignment4-buildroot
 RUN apt-get update && \
     DEBIAN_FRONTEND="noninteractive" TZ="America/Denver" apt-get install -y apt-utils \
                         tzdata \
                         sudo \
                         dialog \
                         build-essential \
-                        sed make binutils bash patch gzip bzip2 perl tar cpio unzip rsync file bc wget python libncurses5-dev git qemu\
+                        sed make binutils bash patch gzip bzip2 perl tar cpio unzip rsync file bc wget python3 libncurses5-dev git qemu\
                         openssh-client \
                         expect \
                         sshpass \
