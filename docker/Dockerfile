@@ -1,4 +1,4 @@
-FROM ubuntu:22.04 AS assignment1
+FROM ubuntu:24.04 AS assignment1
 
 LABEL maintainer="Dan Walkes (walkes@colorado.edu)"
 
@@ -18,8 +18,8 @@ RUN git config --system --add safe.directory '*'
 # For use with github actions we need a user account we can run in the container which
 # maps to the user setup on the github runner VM instance.
 RUN groupadd -g 1001 autotest-admin && \
-    adduser --uid 1001 --gid 1001 --disabled-password --gecos '' autotest-admin && \
-    adduser autotest-admin sudo && \
+    useradd --create-home --uid 1001 --gid 1001 --shell /bin/bash autotest-admin && \
+    usermod -aG sudo autotest-admin && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 FROM assignment1 AS assignment2
@@ -43,9 +43,8 @@ RUN wget -O gcc-arm.tar.xz \
 
 ENV PATH="${PATH}:/usr/local/arm-cross-compiler/install/arm-gnu-toolchain-$GCC_ARM_VERSION-x86_64-aarch64-none-linux-gnu/bin"
 
-RUN  sed -i "/^# If not running interactively, don't do anything.*/i export PATH=\$PATH:$(find /usr/local/arm-cross-compiler/install -maxdepth 2 -type d -name bin)" \
-            /root/.bashrc
-RUN  sed -i "/^# If not running interactively, don't do anything.*/i export PATH=\$PATH:$(find /usr/local/arm-cross-compiler/install -maxdepth 2 -type d -name bin)" \
+RUN echo "export PATH=\$PATH:$(find /usr/local/arm-cross-compiler/install -maxdepth 2 -type d -name bin)" >> /root/.bashrc
+RUN  echo "export PATH=\$PATH:$(find /usr/local/arm-cross-compiler/install -maxdepth 2 -type d -name bin)" >> \
             /home/autotest-admin/.bashrc
 
 
@@ -57,12 +56,12 @@ RUN apt-get update && \
                         sudo \
                         dialog \
                         build-essential \
-                        sed make binutils bash patch gzip bzip2 perl tar cpio unzip rsync file bc wget python3 libncurses5-dev git qemu\
+                        sed make binutils bash patch gzip bzip2 perl tar cpio unzip rsync file bc wget python3 libncurses5-dev git \
                         openssh-client \
                         expect \
                         sshpass \
                         psmisc \
-                        netcat iputils-ping \
+                        netcat-traditional iputils-ping \
                         && \
     ln -fs /usr/share/zoneinfo/America/Denver /etc/localtime && \
     dpkg-reconfigure -f noninteractive tzdata
@@ -73,7 +72,7 @@ RUN apt-get update && apt-get install --reinstall ca-certificates && \
 FROM assignment2 AS assignment4
 FROM assignment4 AS assignment5
 RUN apt-get update && \
-    apt-get install -y netcat
+    apt-get install -y netcat-traditional
 
 FROM assignment5 AS assignment6
 FROM assignment6 AS assignment7
