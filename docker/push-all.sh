@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-TAGPREFIX="24-"
+TAGPREFIX="25-wip-ubuntu24"
 for number in $(seq 7); do
     docker push cuaesd/aesd-autotest:${TAGPREFIX}assignment${number}
 done
